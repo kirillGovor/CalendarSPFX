@@ -1,0 +1,54 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "calendar-client-side-solution",
+    "id": "3b13bb62-2ecb-4aec-9e7b-e0e61d2e8f94",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "",
+      "websiteUrl": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "Undefined-1.16.1"
+    },
+    "webApiPermissionRequests": [
+      {
+        "resource": "Microsoft Graph",
+        "scope": "Calendars.Read"
+      },
+      {
+        "resource": "Microsoft Graph",
+        "scope": "Calendars.ReadWrite"
+      },
+      {
+        "resource": "SharePoint Online Client Extensibility Web Application Principal",
+        "scope": "user_impersonation"
+      }
+    ],
+    "metadata": {
+      "shortDescription": {
+        "default": "Calendar description"
+      },
+      "longDescription": {
+        "default": "Calendar description"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "calendar Feature",
+        "description": "The feature that activates elements of the calendar solution.",
+        "id": "907e8af4-3924-44f5-b9b5-8ca2ede04dc9",
+        "version": "1.1.0.0"
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/calendar.sppkg"
+  }
+}

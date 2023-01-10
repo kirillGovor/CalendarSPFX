@@ -1,0 +1,18 @@
+.event {
+    display: flex;
+    justify-content: space-around;
+    max-width: 100%;
+    align-items: center;
+    column-gap: 10px;
+}
+
+.icon {
+    background: white;
+}
+
+.title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100px;
+}
