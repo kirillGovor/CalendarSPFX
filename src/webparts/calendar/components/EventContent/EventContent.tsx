@@ -8,18 +8,17 @@ interface IEventContentProps {
   onDelete: (id: string) => Promise<void>;
 }
 
-const EventContent = (props: IEventContentProps): ReactElement => (
-  <span className={styles.event} key={props.eventInfo.event.id}>
-    <b>{props.eventInfo?.timeText}</b>
-    <p
-      className={styles.title}
-      aria-label={props.eventInfo?.event?.title}
-      tabIndex={0}
-    >
-      {props.eventInfo?.event?.title}
+const EventContent = ({
+  eventInfo,
+  onDelete,
+}: IEventContentProps): ReactElement => (
+  <span className={styles.event} key={eventInfo.event.id}>
+    <b>{eventInfo.timeText}</b>
+    <p className={styles.title} aria-label={eventInfo.event.title} tabIndex={0}>
+      {eventInfo.event.title}
     </p>
     <IconButton
-      onClick={() => props.onDelete(props.eventInfo.event.id)}
+      onClick={() => onDelete(eventInfo.event.id)}
       className={styles.icon}
       size={10}
       iconProps={{ iconName: "Delete" }}

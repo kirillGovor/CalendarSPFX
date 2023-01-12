@@ -53,7 +53,7 @@ export class GraphService {
 
   public getCalendarEvents = async (): Promise<TransformEvent[]> => {
     const client = await this.getClient();
-    const request: GraphRequest = client.api("/me/calendar/events").select("*");
+    const request: GraphRequest = client.api("/me/calendar/events").select("subject,start,end,id,isAllDay");
     const calendarInfo = await request.get();
     const calendarEvents: MicrosoftGraph.Event[] = calendarInfo.value;
 

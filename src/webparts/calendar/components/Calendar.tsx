@@ -7,12 +7,11 @@ import { MessageBar, MessageBarType } from "office-ui-fabric-react";
 
 import EventContent from "./EventContent/EventContent";
 import { ICalendarProps } from "./interfaces/ICalendarProps";
-import { ICalendarState } from "./interfaces/ICalendarState";
 import styles from "./Calendar.module.scss";
 
-const Calendar = (props: ICalendarProps): ReactElement => {
+const Calendar = ({ graphService }: ICalendarProps): ReactElement => {
   const [error, setError] = React.useState<string | undefined>(undefined);
-  const [state, setState] = React.useState<ICalendarState>({
+  const [state, setState] = React.useState({
     events: [],
     currentActiveStartDate: null,
     currentActiveEndDate: null,
@@ -24,16 +23,18 @@ const Calendar = (props: ICalendarProps): ReactElement => {
   const resetError = useCallback(() => setError(undefined), []);
 
   const fetchData = useCallback(async () => {
-    const calendarEvents = await props.graphService.getCalendarEvents();
+    const calendarEvents = await graphService.getCalendarEvents();
     setState({ ...state, events: calendarEvents || [] });
   }, []);
 
-  const deleteEvent = async (id: string): Promise<void> => {
-    const result = await props.graphService.deleteEvent(id);
+  const deleteEvent = useCallback(async (id: string) => {
+    const result = await graphService.deleteEvent(id);
+    const isError = result.statusCode !== 200;
 
-    setError(result.statusCode !== 200 ? result?.code : undefined);
-  };
+    setError(isError ? result?.code : undefined);
 
+    if (!isError) await fetchData();
+  }, []);
   useEffect((): void => {
     // eslint-disable-next-line no-void
     void fetchData();
