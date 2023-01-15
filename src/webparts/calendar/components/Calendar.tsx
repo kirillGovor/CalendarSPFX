@@ -1,9 +1,13 @@
 import React from "react";
-import { ReactElement, useCallback, useEffect } from "react";
+import { ReactElement, useEffect } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import { EventContentArg } from "@fullcalendar/core";
-import { MessageBar, MessageBarType } from "office-ui-fabric-react";
+import {
+  MessageBar,
+  MessageBarType,
+  Spinner,
+} from "office-ui-fabric-react";
 
 import EventContent from "./EventContent/EventContent";
 import { ICalendarProps } from "./interfaces/ICalendarProps";
@@ -20,21 +24,22 @@ const Calendar = ({ graphService }: ICalendarProps): ReactElement => {
     employeeInfo: null,
   });
 
-  const resetError = useCallback(() => setError(undefined), []);
+  const resetError = (): void => setError(undefined);
 
-  const fetchData = useCallback(async () => {
+  const fetchData = async (): Promise<void> => {
     const calendarEvents = await graphService.getCalendarEvents();
     setState({ ...state, events: calendarEvents || [] });
-  }, []);
+  };
 
-  const deleteEvent = useCallback(async (id: string) => {
+  const deleteEvent = async (id: string): Promise<void> => {
     const result = await graphService.deleteEvent(id);
     const isError = result.statusCode !== 200;
 
     setError(isError ? result?.code : undefined);
 
     if (!isError) await fetchData();
-  }, []);
+  };
+
   useEffect((): void => {
     // eslint-disable-next-line no-void
     void fetchData();
@@ -43,15 +48,19 @@ const Calendar = ({ graphService }: ICalendarProps): ReactElement => {
   return (
     <div className={styles.calendar}>
       <h1>Calendar</h1>
-      <FullCalendar
-        plugins={[dayGridPlugin]}
-        initialView="dayGridMonth"
-        weekends={false}
-        events={state.events}
-        eventContent={(eventInfo: EventContentArg) => (
-          <EventContent eventInfo={eventInfo} onDelete={deleteEvent} />
-        )}
-      />
+      {state.events.length ? (
+        <FullCalendar
+          plugins={[dayGridPlugin]}
+          initialView="dayGridMonth"
+          weekends={false}
+          events={state.events}
+          eventContent={(eventInfo: EventContentArg) => (
+            <EventContent eventInfo={eventInfo} onDelete={deleteEvent} />
+          )}
+        />
+      ) : (
+        <Spinner label="I am definitely loading..." />
+      )}
       {error && (
         <MessageBar
           onDismiss={resetError}
